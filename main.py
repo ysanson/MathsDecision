@@ -23,11 +23,15 @@ ME = ranks.attributeRanks(students)
 printMatrix(ME)
 NR = ranks.countRanks(ME, n)
 nbBinomes, nbTrinomes=0,0
-if n/2>18:
+if n<36:
+    if n%2==0:
+        nbBinomes, nbTrinomes = n/2, 0
+    else:
+        nbBinomes, nbTrinomes = (n-3)/2, 1 
+else:
     nbTrinomes = n-36
     nbBinomes = 18-nbTrinomes
-else:
-    nbBinomes, nbTrinomes = n/2, 0 
+    
 printMatrix(NR)
 groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(ME, n)
 print("groups of 2")
