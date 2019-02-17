@@ -1,4 +1,5 @@
-import rangs, groups
+import rangs, groups, fileOperations
+
 
 #This function returns a matrix containing the student's appreciation for each other.
 def createStudentsAppreciations():
@@ -17,7 +18,6 @@ def printMatrix(matrix):
 
 students = createStudentsAppreciations()
 n = len(students)
-students = createStudentsAppreciations()
 ME = rangs.attributeRanks(students)
 printMatrix(ME)
 NR = rangs.countRanks(ME, n)
@@ -26,4 +26,3 @@ groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(ME, n)
 print("groups of 2")
 printMatrix(groupsOfTwo)
 print("Students left:", studentsLeft)
-#printMatrix(attributeRanks(createStudentsAppreciations()))
