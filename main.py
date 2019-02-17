@@ -17,22 +17,10 @@ def printMatrix(matrix):
 
 students = createStudentsAppreciations()
 n = len(students)
-NG3, NG2 = 0,0
-if n%3 == 1:
-    NG3 = (int)(n-4)/2
-    NG2 = 2
-elif n%3 == 2:
-    NG3 = (int)(n-2)/3
-    NG2 = 1
-else:
-    NG3 = n/3
-
-print("NG3: ", NG3)
-print("n-NG3", n-NG3)
 students = createStudentsAppreciations()
 studentRanks = rangs.attributeRanks(students)
 printMatrix(studentRanks)
-groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(studentRanks, NG3, NG2, n)
+groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(studentRanks, n)
 print("groups of 2")
 printMatrix(groupsOfTwo)
 print("Students left:", studentsLeft)

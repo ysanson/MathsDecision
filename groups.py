@@ -2,16 +2,12 @@ from random import randint
 
 #This function creates groups of 2, based on the appreciations given, and the groups we have to form.
 #Returns an array containing the groups, and another array containing the students left.
-def createGroupsOfTwo(studentRanks, NG3, NG2, n):
+#TODO: change this whole algorithm
+def createGroupsOfTwo(studentRanks, n):
     groupsOfTwo = []
-    studentWeight = []
-    for i in range(n):
-        studentWeight.append(sum(studentRanks[i]))
     studentsLeft = []
-    for i in range(n):
-        studentsLeft.append(i)
     stu = randint(0, n)
-    while len(studentsLeft) > NG3:
+    while len(studentsLeft) > n: #TODO: change this statement
         maxRank = -1
         studentToPick = -1
         while stu not in studentsLeft:
