@@ -23,15 +23,24 @@ RANKS_CORRELATION={
 #This function returns a bi-dimensional array containing the rank of each student's matching.
 def attributeRanks(students):
     n = len(students)
-    studentRanks = [[-1] * n for _ in range(n)]
+    ME = [[-1] * n for _ in range(n)]
     for i in range(n):
         for j in range(i):
             markA = students[i][j]
             markB = students[j][i]
             rank = RANKS[RANKS_CORRELATION[markA]][RANKS_CORRELATION[markB]]
-            studentRanks[i][j] = studentRanks[j][i] = rank
-    return studentRanks
+            ME[i][j] = ME[j][i] = rank
+    return ME
 
+#Counts the number of specific ranks a student have.
+#Returns a matrix, 21*n, containing the count of ranks.
+def countRanks(ME, n):
+        NR = [[0] * n for _ in range(21)]
+        for i in range(n):
+                for j in range(n):
+                        rank = ME[i][j]
+                        NR[rank][i] += 1 
+        return NR
 
 
 
