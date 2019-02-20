@@ -35,7 +35,7 @@ def attributeRanks(students):
 #Counts the number of specific ranks a student have.
 #Returns a matrix, 21*n, containing the count of ranks.
 def countRanks(ME, n):
-        NR = [[0] * n for _ in range(21)]
+        NR = [[0] * n for _ in range(22)]
         for i in range(n):
                 for j in range(n):
                         rank = ME[i][j]
