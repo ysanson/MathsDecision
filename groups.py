@@ -25,3 +25,19 @@ def createGroupsOfTwo(studentRanks, n):
         studentsLeft.remove(stu)
         studentsLeft.remove(studentToPick)
     return groupsOfTwo, studentsLeft
+
+
+
+#Chooses a student based on his number of maxRank
+#Returns a number, corresponding to a student in the matrix.
+def chosenStudent(matrix, maxRank):
+    studentsChosen = []
+    for i in  range(len(matrix)):
+        if matrix[i][maxRank] == 1:
+            studentsChosen.append(i)
+    if len(studentsChosen) >1:
+        #TODO: modifier
+        return 0
+    elif len(studentsChosen)==0:
+        return chosenStudent(matrix, maxRank-1)
+    return studentsChosen[0]
