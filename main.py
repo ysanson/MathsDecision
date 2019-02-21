@@ -1,6 +1,5 @@
 import ranks, groups, fileOperations
 
-
 #This function returns a matrix containing the student's appreciation for each other.
 def createStudentsAppreciations():
     return fileOperations.readAppreciationsCSV() 
