@@ -42,6 +42,8 @@ def chosenStudent(matrix, maxRank):
         return chosenStudent(matrix, maxRank-1)
     return studentsChosen[0]
 
+#This function is used to separate students that have the same maxRank.
+#Returns a number representing a student, distinguished from the others.
 def distinguishStudents(studentList, matrix, maxRank):
     count = matrix[studentList[0]][maxRank]
     studentsChosen = []
@@ -61,9 +63,21 @@ def distinguishStudents(studentList, matrix, maxRank):
         return distinguishStudents(studentList, matrix, maxRank-1)
     return studentsChosen[0]
 
+#This function returns the maximum rank of the matrix.
 def maximumRank(matrix):
     maxR = 0
     for i in range(22,0,-1):
         if matrix[0][i] != -1 and i>=maxR:
             maxR=i
     return maxR
+
+#This function puts -1 to a rank if the students left doesn't have that rank.
+def disableRank(studentsLeft, matrix, maxRank):
+    isDisable = True
+    for i in studentsLeft:
+        if matrix[i][maxRank] != 0:
+            isDisable = False
+    if isDisable:
+        for i in len(matrix):
+            matrix[i][maxRank] = -1
+    return isDisable
