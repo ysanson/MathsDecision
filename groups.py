@@ -1,5 +1,5 @@
 from random import randint
-
+import time
 #This function creates groups of 2, based on the appreciations given, and the groups we have to form.
 #Returns an array containing the groups, and another array containing the students left.
 #TODO: change this whole algorithm
@@ -14,14 +14,21 @@ def createGroupsOfTwo(studentRanks, numberOfGroups):
         if isDisable:
             maxRank = maximumRank(studentRanks)
         student = chooseStudent(studentRanks, maxRank)
-
+        otherStudent = findOtherStudent(studentRanks, student)
+        group = [student, otherStudent]
+        print(group)
+        groupsOfTwo.append(group)
+        studentsLeft.remove(student)
+        studentsLeft.remove(otherStudent)
+        studentRanks = setStudentsPicked(group, studentRanks)
     return groupsOfTwo, studentsLeft
 
 #Chooses a student based on his number of maxRank
 #Returns a number, corresponding to a student in the matrix.
 def chooseStudent(matrix, maxRank):
     studentsChosen = []
-    if maxRank ==1:
+    print(maxRank)
+    if maxRank == 1:
         return None
     for i in  range(len(matrix)):
         if matrix[i][maxRank] == 1:
@@ -49,7 +56,7 @@ def distinguishStudents(studentList, matrix, maxRank):
                 studentsChosen.append(i)
     if len(studentsChosen) >1:
         return distinguishStudents(studentsChosen, matrix, maxRank-1)
-    elif len(studentsChosen==0):
+    elif len(studentsChosen) == 0:
         return distinguishStudents(studentList, matrix, maxRank-1)
     return studentsChosen[0]
 
@@ -71,3 +78,26 @@ def disableRank(studentsLeft, matrix, maxRank):
         for i in len(matrix):
             matrix[i][maxRank] = -1
     return isDisable, matrix
+
+#This function searches the best student to form a group with the one in parameter.
+#Returns a number, corresponding to the picked student.
+def findOtherStudent(studentRanks, stu):
+    bestPicks = []
+    rank = 0
+    for i in range(len(studentRanks)):
+        if studentRanks[i][stu]>rank: #If we find a superior rank, we clear the picks and update the rank
+            bestPicks=[]
+            rank = studentRanks[i][stu]
+            bestPicks.append(i)
+        elif studentRanks[i][stu] == rank: #If we find someone with the same rank, we add him to the list
+            bestPicks.append(i)
+    if len(bestPicks) == 1:
+        return bestPicks[0]
+    elif len(bestPicks) > 1:
+        return distinguishStudents(bestPicks, studentRanks, rank-1)
+
+def setStudentsPicked(students, studentRanks):
+    for student in students:
+        for i in range(len(studentRanks)):
+            studentRanks[student][i] = -1
+    return studentRanks

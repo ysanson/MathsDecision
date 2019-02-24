@@ -23,11 +23,9 @@ if n<36:
 else:
     nbTrinomes = n-36
     nbBinomes = 18-nbTrinomes
-  
+
 printMatrix(NR)
-"""
-groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(ME, n)
+groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(ME, nbBinomes+nbTrinomes)
 print("groups of 2")
 printMatrix(groupsOfTwo)
 print("Students left:", studentsLeft)
-"""
