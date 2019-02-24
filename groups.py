@@ -2,7 +2,6 @@ from random import randint
 
 #This function creates groups of 2, based on the appreciations given, and the groups we have to form.
 #Returns an array containing the groups, and another array containing the students left.
-#TODO: change this whole algorithm
 def createGroupsOfTwo(studentRanks, ranksCount, numberOfGroups):
     groupsOfTwo = []
     studentsLeft = []
@@ -103,8 +102,63 @@ def findOtherStudent(studentRanks, ranksCount, stu):
     elif len(bestPicks) > 1:
         return distinguishStudents(bestPicks, ranksCount, rank-1)
 
+#This function sets the students in 
 def setStudentsPicked(students, studentRanks):
     for student in students:
         for i in range(len(studentRanks)):
             studentRanks[student][i] = -1
     return studentRanks
+
+def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
+    maxRankPerGroup = [[0] * len(groupsOfTwo) for _ in range(len(studentsLeft))]
+    minRankPerGroup = [[0] * len(groupsOfTwo) for _ in range(len(studentsLeft))]
+    groupsOfThree = []
+    #Useful if there are two groups with the same max rank
+    for studentIndex, student in enumerate(studentsLeft): #We find the max rank for each group for student
+        groupNumber = 0
+        secondTimeChoosing = []
+        for group in groupsOfTwo:
+            stu1 = group[0]
+            stu2 = group[1]
+            #We look at the max rank between the student and the group's member
+            if studentRanks[studentIndex][stu1] > studentRanks[student][stu2]:
+                maxRankPerGroup[studentIndex][groupNumber] = studentRanks[studentIndex][stu1]
+                minRankPerGroup[studentIndex][groupNumber] = studentRanks[studentIndex][stu2]
+            else:
+                maxRankPerGroup[studentIndex][groupNumber] = studentRanks[studentIndex][stu2]
+                minRankPerGroup[studentIndex][groupNumber] = studentRanks[studentIndex][stu1]
+            groupNumber += 1
+        groupForStudent = -1
+        chosenGroups = []
+        for group in range(len(groupsOfTwo)):
+            #If there is a group with a higher rank
+            if maxRankPerGroup[studentIndex][group] > groupForStudent:
+                groupForStudent = maxRankPerGroup[studentIndex][group]
+                chosenGroups = []
+                chosenGroups.append(group)
+            elif maxRankPerGroup[studentIndex][group] == groupForStudent:
+                chosenGroups.append(group)
+        if len(chosenGroups) > 1:
+            #If there is another group to place the student
+            groupForStudent = -1
+            for group in chosenGroups:
+                #We search for the group with the highest rank
+                if groupForStudent < minRankPerGroup[studentIndex][group]:
+                    groupForStudent = minRankPerGroup[studentIndex][group]
+                    secondTimeChoosing = []
+                    secondTimeChoosing.append(group)
+                elif groupForStudent == minRankPerGroup[studentIndex][group]:
+                    secondTimeChoosing.append(group)
+
+        #We proceed to add the student to a group.
+        groupForStudent = -1
+        if len(chosenGroups) == 1:
+            groupForStudent = chosenGroups[0] 
+        elif len(secondTimeChoosing) >= 1:
+            groupForStudent = secondTimeChoosing[0] #If there are more than one choice, we take thee first one.
+        groupOfThree = groupsOfTwo[groupForStudent]
+        groupOfThree.append(student)
+        groupsOfThree.append(groupOfThree)
+        groupsOfTwo.remove(groupsOfTwo[groupForStudent])
+
+    return groupsOfTwo, groupsOfThree

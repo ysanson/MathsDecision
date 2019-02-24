@@ -19,3 +19,28 @@ def readAppreciationsCSV():
                 line_count +=1
         del nameCorrelation[-1]
         return nameCorrelation, appreciations
+
+#This function writes a CSV conforming to the standards required by the project.
+def writeCSV(groupsOfTwo, groupsOfThree, nameCorrelation):
+    with open('groupesSSS.csv', 'w') as rendu:
+        writer = csv.writer(rendu)
+        writer.writerow(['Projet SSS', 'Projet SSS', 'Projet SSS', 'Projet SSS'])
+        writer.writerow(['Nombre de répartitions', 1])
+        writer.writerow(['Répartition numéro', 1])
+        writer.writerow(['Nombre de groupes', len(groupsOfTwo)+len(groupsOfThree)])
+        groupNumber = 1
+        for i in range(len(groupsOfThree)): #Writing groups of three
+            line = ["Groupe "+str(groupNumber)]
+            for stu in groupsOfThree[i]:
+                line.append(nameCorrelation[stu])
+            writer.writerow(line)
+            groupNumber +=1
+        for i in range(len(groupsOfTwo)): #Writing groups of two
+            line = ["Groupe "+str(groupNumber)]
+            for stu in groupsOfTwo[i]:
+                line.append(nameCorrelation[stu])
+            writer.writerow(line)
+            groupNumber +=1
+        
+
+
