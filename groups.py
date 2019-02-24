@@ -121,7 +121,7 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
             stu1 = group[0]
             stu2 = group[1]
             #We look at the max rank between the student and the group's member
-            if studentRanks[studentIndex][stu1] > studentRanks[student][stu2]:
+            if studentRanks[studentIndex][stu1] > studentRanks[studentIndex][stu2]:
                 maxRankPerGroup[studentIndex][groupNumber] = studentRanks[studentIndex][stu1]
                 minRankPerGroup[studentIndex][groupNumber] = studentRanks[studentIndex][stu2]
             else:
