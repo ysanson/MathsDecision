@@ -55,7 +55,8 @@ def chooseStudent(studentRanks, ranksCount, maxRank):
 def distinguishStudents(studentList, ranksCount, maxRank):
     print("studentList[0] : ", studentList[0])
     print("maxRank : ", maxRank)
-    count = ranksCount[studentList[0]][maxRank]
+    count =100 #ranksCount[studentList[0]][maxRank]
+    print(count)
     studentsChosen = []
     for i in studentList:
         if ranksCount[i][maxRank]>0:
@@ -68,8 +69,10 @@ def distinguishStudents(studentList, ranksCount, maxRank):
             elif ranksCount[i][maxRank] == count and ranksCount[i][maxRank] != -1:
                 studentsChosen.append(i)
     if len(studentsChosen) >1:
+        print("studentChosenMutiple")
         return distinguishStudents(studentsChosen, ranksCount, maxRank-1)
     elif len(studentsChosen) == 0:
+        print("noStudentChosen")
         return distinguishStudents(studentList, ranksCount, maxRank-1)
     return studentsChosen[0]
 
