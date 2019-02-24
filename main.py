@@ -25,7 +25,7 @@ else:
     nbBinomes = 18-nbTrinomes
 
 printMatrix(NR)
-groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(ME, nbBinomes+nbTrinomes)
+groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(ME, NR, (nbBinomes+nbTrinomes))
 print("groups of 2")
 printMatrix(groupsOfTwo)
 print("Students left:", studentsLeft)

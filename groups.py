@@ -1,9 +1,9 @@
 from random import randint
-import time
+
 #This function creates groups of 2, based on the appreciations given, and the groups we have to form.
 #Returns an array containing the groups, and another array containing the students left.
 #TODO: change this whole algorithm
-def createGroupsOfTwo(studentRanks, numberOfGroups):
+def createGroupsOfTwo(studentRanks, ranksCount, numberOfGroups):
     groupsOfTwo = []
     studentsLeft = []
     maxRank = 21
@@ -13,8 +13,9 @@ def createGroupsOfTwo(studentRanks, numberOfGroups):
         isDisable, studentRanks = disableRank(studentsLeft, studentRanks, maxRank)
         if isDisable:
             maxRank = maximumRank(studentRanks)
-        student = chooseStudent(studentRanks, maxRank)
-        otherStudent = findOtherStudent(studentRanks, student)
+        student = chooseStudent(studentRanks, ranksCount, maxRank)
+        print("Student : ", student)
+        otherStudent = findOtherStudent(studentRanks, ranksCount, student)
         group = [student, otherStudent]
         print(group)
         groupsOfTwo.append(group)
@@ -25,39 +26,51 @@ def createGroupsOfTwo(studentRanks, numberOfGroups):
 
 #Chooses a student based on his number of maxRank
 #Returns a number, corresponding to a student in the matrix.
-def chooseStudent(matrix, maxRank):
+def chooseStudent(studentRanks, ranksCount, maxRank):
     studentsChosen = []
     print(maxRank)
     if maxRank == 1:
         return None
-    for i in  range(len(matrix)):
-        if matrix[i][maxRank] == 1:
+    for i in range(len(ranksCount)):
+        if studentRanks[i][1] == -1:
+            for j in range(22):
+                ranksCount[i][j] =0
+        if ranksCount[i][maxRank] == 1 and studentRanks[i][1] != -1:
             studentsChosen.append(i)
+    print(studentsChosen)
     if len(studentsChosen) >1:
-        return distinguishStudents(studentsChosen, matrix, maxRank-1)
+        student = distinguishStudents(studentsChosen, ranksCount, maxRank-1)
+        if studentRanks[student][1] != -1:
+            return student
+        else:
+            for i in range(22):
+                ranksCount[student][i] = -1
+            return chooseStudent(studentRanks, ranksCount, maxRank)
     elif len(studentsChosen)==0:
-        return chooseStudent(matrix, maxRank-1)
+        return chooseStudent(studentRanks, ranksCount, maxRank-1)
     return studentsChosen[0]
 
 #This function is used to separate students that have the same maxRank.
 #Returns a number representing a student, distinguished from the others.
-def distinguishStudents(studentList, matrix, maxRank):
-    count = matrix[studentList[0]][maxRank]
+def distinguishStudents(studentList, ranksCount, maxRank):
+    print("studentList[0] : ", studentList[0])
+    print("maxRank : ", maxRank)
+    count = ranksCount[studentList[0]][maxRank]
     studentsChosen = []
     for i in studentList:
-        if matrix[i][maxRank]>0:
+        if ranksCount[i][maxRank]>0:
             #If rank number is less than found before
-            if matrix[i][maxRank] < count:
+            if ranksCount[i][maxRank] < count and ranksCount[i][maxRank] != -1:
                 studentsChosen = []
                 studentsChosen.append(i)
-                count = matrix[i][maxRank]
+                count = ranksCount[i][maxRank]
             #If rank number is equal to those already found
-            elif matrix[i][maxRank] == count:
+            elif ranksCount[i][maxRank] == count and ranksCount[i][maxRank] != -1:
                 studentsChosen.append(i)
     if len(studentsChosen) >1:
-        return distinguishStudents(studentsChosen, matrix, maxRank-1)
+        return distinguishStudents(studentsChosen, ranksCount, maxRank-1)
     elif len(studentsChosen) == 0:
-        return distinguishStudents(studentList, matrix, maxRank-1)
+        return distinguishStudents(studentList, ranksCount, maxRank-1)
     return studentsChosen[0]
 
 #This function returns the maximum rank of the matrix.
@@ -81,9 +94,10 @@ def disableRank(studentsLeft, matrix, maxRank):
 
 #This function searches the best student to form a group with the one in parameter.
 #Returns a number, corresponding to the picked student.
-def findOtherStudent(studentRanks, stu):
+def findOtherStudent(studentRanks, ranksCount, stu):
     bestPicks = []
     rank = 0
+    print("stu : ", stu)
     for i in range(len(studentRanks)):
         if studentRanks[i][stu]>rank: #If we find a superior rank, we clear the picks and update the rank
             bestPicks=[]
@@ -94,7 +108,7 @@ def findOtherStudent(studentRanks, stu):
     if len(bestPicks) == 1:
         return bestPicks[0]
     elif len(bestPicks) > 1:
-        return distinguishStudents(bestPicks, studentRanks, rank-1)
+        return distinguishStudents(bestPicks, ranksCount, rank-1)
 
 def setStudentsPicked(students, studentRanks):
     for student in students:
