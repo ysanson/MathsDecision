@@ -11,7 +11,7 @@ def readAppreciationsCSV():
         for line in csv_reader:
             if line_count == 0: #Retrieve student names
                 for pos, name in enumerate(line):
-                    nameCorrelation[pos-1] = name
+                    nameCorrelation[pos-1] = name #Because the names are 1 column away from the matrix column.
                 line_count +=1
             else:
                 line.pop(0)
