@@ -20,17 +20,7 @@ def readAppreciationsCSV(fileName):
                 appreciations.append(line)
                 line_count +=1
         del nameCorrelation[-1]
-        appreciations = truncateMatrix(appreciations, 11)
         return nameCorrelation, appreciations
-
-def truncateMatrix(appreciations, numberToKeep):
-    if len(appreciations) < numberToKeep:
-        return appreciations
-    else:
-        appreciations = appreciations[:numberToKeep]
-        for index, col in enumerate(appreciations):
-            appreciations[index]  = col[:numberToKeep]
-        return appreciations
 
 #This function writes a CSV conforming to the standards required by the project.
 def writeCSV(groupsOfTwo, groupsOfThree, nameCorrelation):

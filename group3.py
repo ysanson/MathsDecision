@@ -88,3 +88,4 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
             groupOfThree.append(studentsLeft[stu2[0]])
             groupsOfThree.append(groupOfThree)
             groupsOfTwo.remove(groupsOfTwo[groupForStudent])
+    return groupsOfTwo, groupsOfThree

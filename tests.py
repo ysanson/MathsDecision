@@ -1,32 +1,38 @@
-import csv
-
-#This function reads the CSV containing the preferences of each student.
-#Returns a dictionary row-name, and the matrix of appreciations.
-def readAppreciationsCSV():
-    with open('preferences.csv', mode='r') as preferences:
-        csv_reader = csv.reader(preferences, delimiter=',')
-        line_count=0
-        nameCorrelation = {0:''}
-        appreciations = []
-        for line in csv_reader:
-            if line_count == 0: #Retrieve student names
-                for pos, name in enumerate(line):
-                    nameCorrelation[pos-1] = name
-                line_count +=1
-            else:
-                line.pop(0)
-                appreciations.append(line)
-                line_count +=1
-        del nameCorrelation[-1]
-        return nameCorrelation, appreciations
+import csv, sys
+import fileOperations, groups, group3, ranks
 
 #This function prints a matrix on screen.
 def printMatrix(matrix):
     for line in matrix:
         print(line)
 
-names, matrix = readAppreciationsCSV()
-print("names")
-print(names)
-print("matrix")
-printMatrix(matrix)
+ext = sys.argv[1][1:]
+fileName = "preferences"+ext+".csv"
+names, students = fileOperations.readAppreciationsCSV(fileName)
+n = len(students)
+ME = ranks.attributeRanks(students)
+NR = ranks.countRanks(ME, n)
+nbBinomes, nbTrinomes=0,0
+if n<36:
+    if n%2==0:
+        nbBinomes, nbTrinomes = (int)(n/2), 0
+    else:
+        nbBinomes, nbTrinomes = (int)((n-3)/2), 1 
+else:
+    nbTrinomes = n-36
+    nbBinomes = 18-nbTrinomes
+groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(ME, NR, (nbBinomes+nbTrinomes))
+groupsOfThree=[]
+print("Groups of 2 : ")
+printMatrix(groupsOfTwo)
+print("Students left : ", studentsLeft)
+if nbTrinomes>=1:
+    groupsOfTwo, groupsOfThree = group3.createGroupsOfThree(groupsOfTwo, studentsLeft, ME)
+print("Final results :")
+print("Groups of 2 : ")
+printMatrix(groupsOfTwo)
+print("Groups of 3 : ")
+printMatrix(groupsOfThree)
+print("Writing CSV...")
+fileOperations.writeCSV(groupsOfTwo, groupsOfThree, names)
+print("Writing complete.\nEnd of the script.")
