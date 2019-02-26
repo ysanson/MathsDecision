@@ -1,5 +1,3 @@
-import sys
-from random import randint
 
 #Matrix of ranks
 RANKS= [[21,20,18,15,11,6],

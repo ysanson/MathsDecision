@@ -1,3 +1,81 @@
+import csv, sys
+
+#This function reads the CSV containing the preferences of each student.
+#Returns a dictionary row-name, and the matrix of appreciations.
+def readAppreciationsCSV(fileName):
+    with open(fileName, mode='r') as preferences:
+        csv_reader = csv.reader(preferences, delimiter=',')
+        line_count=0
+        nameCorrelation = {0:''}
+        appreciations = []
+        for line in csv_reader:
+            if line_count == 0: #Retrieve student names
+                for pos, name in enumerate(line):
+                    nameCorrelation[pos-1] = name #Because the names are 1 column away from the matrix column.
+                line_count +=1
+            else:
+                line.pop(0)
+                appreciations.append(line)
+                line_count +=1
+        del nameCorrelation[-1]
+        return nameCorrelation, appreciations
+
+#This function writes a CSV conforming to the standards required by the project.
+def writeCSV(groupsOfTwo, groupsOfThree, nameCorrelation):
+    with open('groupesSSS.csv', 'w') as rendu:
+        writer = csv.writer(rendu, delimiter=" ")
+        line=[]
+        for i in range(len(groupsOfThree)): #Writing groups of three
+            for stu in groupsOfThree[i]:
+                line.append(nameCorrelation[stu])
+            line[len(line)-1] +=";"
+        for i in range(len(groupsOfTwo)): #Writing groups of two
+            for stu in groupsOfTwo[i]:
+                line.append(nameCorrelation[stu])
+            line[len(line)-1] +=";"
+        line[len(line)-1] = line[len(line)-1][:-1]
+        writer.writerow(line)
+
+#Matrix of ranks
+RANKS= [[21,20,18,15,11,6],
+        [20,19,17,14,10,5],
+        [18,17,16,13,9,4],
+        [15,14,13,12,8,3],
+        [11,10,9,8,7,2],
+        [6,5,4,3,2,1]]
+
+#Correlation between a rank and a line of the matrix
+RANKS_CORRELATION={
+    "TB":0,
+    "B":1,
+    "AB":2,
+    "P":3,
+    "I":4,
+    "AR":5
+}
+
+#Students is a bi-dimensional array containing the students appreciations for each other.
+#This function returns a bi-dimensional array containing the rank of each student's matching.
+def attributeRanks(students):
+    n = len(students)
+    ME = [[-1] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(i):
+            markA = students[i][j]
+            markB = students[j][i]
+            rank = RANKS[RANKS_CORRELATION[markA]][RANKS_CORRELATION[markB]]
+            ME[i][j] = ME[j][i] = rank
+    return ME
+
+#Counts the number of specific ranks a student have.
+#Returns a matrix, n*22, containing the count of ranks.
+def countRanks(ME, n):
+        NR = [[0] * 22 for _ in range(n)]
+        for i in range(n):
+                for j in range(n):
+                        rank = ME[i][j]
+                        NR[i][rank] += 1 
+        return NR
 
 #This function creates groups of 2, based on the appreciations given, and the groups we have to form.
 #Returns an array containing the groups, and another array containing the students left.
@@ -159,3 +237,41 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
         groupsOfTwo.remove(groupsOfTwo[groupForStudent])
 
     return groupsOfTwo, groupsOfThree
+#This function prints a matrix on screen.
+def printMatrix(matrix):
+    for line in matrix:
+        print(line)
+
+#This function is the main of this script.
+def main():
+    ext = sys.argv[1][1:]
+    fileName = "preferences"+ext+".csv"
+    names, students = readAppreciationsCSV(fileName)
+    n = len(students)
+    ME = attributeRanks(students)
+    printMatrix(ME)
+    NR = countRanks(ME, n)
+    nbBinomes, nbTrinomes=0,0
+    if n<36:
+        if n%2==0:
+            nbBinomes, nbTrinomes = (int)(n/2), 0
+        else:
+            nbBinomes, nbTrinomes = (int)((n-3)/2), 1 
+    else:
+        nbTrinomes = n-36
+        nbBinomes = 18-nbTrinomes
+    groupsOfTwo, studentsLeft = createGroupsOfTwo(ME, NR, (nbBinomes+nbTrinomes))
+    groupsOfThree=[]
+    if nbTrinomes>1:
+        groupsOfTwo, groupsOfThree = createGroupsOfThree(groupsOfTwo, studentsLeft, ME)
+    print("Final results :")
+    print("Groups of 2 : ")
+    printMatrix(groupsOfTwo)
+    print("Groups of 3 : ")
+    printMatrix(groupsOfThree)
+    print("Writing CSV...")
+    writeCSV(groupsOfTwo, groupsOfThree, names)
+    print("Writing complete.\nEnd of the script.")
+
+
+main()

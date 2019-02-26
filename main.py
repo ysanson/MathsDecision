@@ -1,6 +1,5 @@
 import sys
 import ranks, groups, fileOperations
- 
 
 #This function prints a matrix on screen.
 def printMatrix(matrix):
@@ -27,7 +26,7 @@ def main():
         nbBinomes = 18-nbTrinomes
     groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(ME, NR, (nbBinomes+nbTrinomes))
     groupsOfThree=[]
-    if nbTrinomes>1:
+    if nbTrinomes>=1:
         groupsOfTwo, groupsOfThree = groups.createGroupsOfThree(groupsOfTwo, studentsLeft, ME)
     print("Final results :")
     print("Groups of 2 : ")
