@@ -1,8 +1,6 @@
+import sys
 import ranks, groups, fileOperations
-
-#This function returns a matrix containing the student's appreciation for each other.
-def createStudentsAppreciations():
-    return fileOperations.readAppreciationsCSV() 
+ 
 
 #This function prints a matrix on screen.
 def printMatrix(matrix):
@@ -11,24 +9,26 @@ def printMatrix(matrix):
 
 #This function is the main of this script.
 def main():
-    names, students = createStudentsAppreciations()
+    ext = sys.argv[1][1:]
+    fileName = "preferences"+ext+".csv"
+    names, students = fileOperations.readAppreciationsCSV(fileName)
     n = len(students)
     ME = ranks.attributeRanks(students)
+    printMatrix(ME)
     NR = ranks.countRanks(ME, n)
     nbBinomes, nbTrinomes=0,0
     if n<36:
         if n%2==0:
-            nbBinomes, nbTrinomes = n/2, 0
+            nbBinomes, nbTrinomes = (int)(n/2), 0
         else:
-            nbBinomes, nbTrinomes = (n-3)/2, 1 
+            nbBinomes, nbTrinomes = (int)((n-3)/2), 1 
     else:
         nbTrinomes = n-36
         nbBinomes = 18-nbTrinomes
     groupsOfTwo, studentsLeft = groups.createGroupsOfTwo(ME, NR, (nbBinomes+nbTrinomes))
-    print("groups of 2")
-    printMatrix(groupsOfTwo)
-    print("Students left:", studentsLeft)
-    groupsOfTwo, groupsOfThree = groups.createGroupsOfThree(groupsOfTwo, studentsLeft, ME)
+    groupsOfThree=[]
+    if nbTrinomes>1:
+        groupsOfTwo, groupsOfThree = groups.createGroupsOfThree(groupsOfTwo, studentsLeft, ME)
     print("Final results :")
     print("Groups of 2 : ")
     printMatrix(groupsOfTwo)
@@ -37,5 +37,6 @@ def main():
     print("Writing CSV...")
     fileOperations.writeCSV(groupsOfTwo, groupsOfThree, names)
     print("Writing complete.\nEnd of the script.")
+
 
 main()

@@ -9,9 +9,7 @@ def createGroupsOfTwo(studentRanks, ranksCount, numberOfGroups):
     for i in range(len(studentRanks)):
         studentsLeft.append(i)
     for i in range(numberOfGroups):
-        isDisable, studentRanks = disableRank(studentsLeft, studentRanks, maxRank)
-        if isDisable:
-            maxRank = maximumRank(studentRanks)
+        maxRank = maximumRank(ranksCount)
         student = chooseStudent(studentRanks, ranksCount, maxRank)
         otherStudent = findOtherStudent(studentRanks, ranksCount, student)
         group = [student, otherStudent]
@@ -29,8 +27,8 @@ def chooseStudent(studentRanks, ranksCount, maxRank):
         return None
     for i in range(len(ranksCount)):
         if studentRanks[i][1] == -1:
-            for j in range(22):
-                ranksCount[i][j] =0
+            for j in range(21):
+                ranksCount[i][j]=0
         if ranksCount[i][maxRank] == 1 and studentRanks[i][1] != -1:
             studentsChosen.append(i)
     if len(studentsChosen) >1:
@@ -38,7 +36,7 @@ def chooseStudent(studentRanks, ranksCount, maxRank):
         if studentRanks[student][1] != -1:
             return student
         else:
-            for i in range(22):
+            for i in range(21):
                 ranksCount[student][i] = -1
             return chooseStudent(studentRanks, ranksCount, maxRank)
     elif len(studentsChosen)==0:
@@ -69,21 +67,21 @@ def distinguishStudents(studentList, ranksCount, maxRank):
 #This function returns the maximum rank of the matrix.
 def maximumRank(matrix):
     maxR = 0
-    for i in range(22,0,-1):
+    for i in range(21,0,-1):
         if matrix[0][i] != -1 and i>=maxR:
             maxR=i
     return maxR
 
 #This function puts -1 to a rank if the students left doesn't have that rank.
-def disableRank(studentsLeft, matrix, maxRank):
+def disableRank(studentsLeft, studentRanks, ranksCount, maxRank):
     isDisable = True
     for i in studentsLeft:
-        if matrix[i][maxRank] != 0:
+        if ranksCount[i][maxRank] != 0:
             isDisable = False
     if isDisable:
-        for i in len(matrix):
-            matrix[i][maxRank] = -1
-    return isDisable, matrix
+        for i in len(studentRanks):
+            ranksCount[i][maxRank] = -1
+    return isDisable, studentRanks
 
 #This function searches the best student to form a group with the one in parameter.
 #Returns a number, corresponding to the picked student.
@@ -132,22 +130,22 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
         chosenGroups = []
         for group in range(len(groupsOfTwo)):
             #If there is a group with a higher rank
-            if maxRankPerGroup[studentIndex][group] > groupForStudent:
+            if minRankPerGroup[studentIndex][group] > groupForStudent:
                 groupForStudent = maxRankPerGroup[studentIndex][group]
                 chosenGroups = []
                 chosenGroups.append(group)
-            elif maxRankPerGroup[studentIndex][group] == groupForStudent:
+            elif minRankPerGroup[studentIndex][group] == groupForStudent:
                 chosenGroups.append(group)
         if len(chosenGroups) > 1:
             #If there is another group to place the student
             groupForStudent = -1
             for group in chosenGroups:
                 #We search for the group with the highest rank
-                if groupForStudent < minRankPerGroup[studentIndex][group]:
-                    groupForStudent = minRankPerGroup[studentIndex][group]
+                if groupForStudent < maxRankPerGroup[studentIndex][group]:
+                    groupForStudent = maxRankPerGroup[studentIndex][group]
                     secondTimeChoosing = []
                     secondTimeChoosing.append(group)
-                elif groupForStudent == minRankPerGroup[studentIndex][group]:
+                elif groupForStudent == maxRankPerGroup[studentIndex][group]:
                     secondTimeChoosing.append(group)
 
         #We proceed to add the student to a group.
