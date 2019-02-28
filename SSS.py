@@ -1,5 +1,7 @@
 import sys
-import ranks, groups, fileOperations
+import src.fileOperations as fileOperations
+import src.groups as groups
+import src.ranks as ranks
 
 
 # This function prints a matrix on screen.

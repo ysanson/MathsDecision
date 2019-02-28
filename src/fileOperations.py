@@ -5,7 +5,7 @@ import csv, os.path
 # Returns a dictionary row-name, and the matrix of appreciations.
 def readAppreciationsCSV(fileName):
     relPath = os.path.abspath(os.path.dirname(__file__))
-    pathToFile = os.path.join(relPath, "../DONNEES/" + fileName)
+    pathToFile = os.path.join(relPath, "../../DONNEES/" + fileName)
     with open(pathToFile, mode='r') as preferences:
         csv_reader = csv.reader(preferences, delimiter=',')
         line_count = 0
@@ -22,7 +22,6 @@ def readAppreciationsCSV(fileName):
                 line_count += 1
         del nameCorrelation[-1]
         return nameCorrelation, appreciations
-
 
 # This function writes a CSV conforming to the standards required by the project.
 def writeCSV(repartitions, nameCorrelation):

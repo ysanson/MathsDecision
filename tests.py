@@ -1,6 +1,8 @@
 import csv, sys
 from multiprocessing import Process, Queue
-import fileOperations, groupsMulti, ranks
+import src.fileOperations as fileOperations
+import src.groupsMulti as groupsMulti
+import src.ranks as ranks
 
 #This function prints a matrix on screen.
 def printMatrix(matrix):
