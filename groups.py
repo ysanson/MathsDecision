@@ -1,6 +1,5 @@
-
-#This function creates groups of 2, based on the appreciations given, and the groups we have to form.
-#Returns an array containing the groups, and another array containing the students left.
+# This function creates groups of 2, based on the appreciations given, and the groups we have to form.
+# Returns an array containing the groups, and another array containing the students left.
 def createGroupsOfTwo(studentRanks, ranksCount, numberOfGroups):
     groupsOfTwo = []
     studentsLeft = []
@@ -18,8 +17,9 @@ def createGroupsOfTwo(studentRanks, ranksCount, numberOfGroups):
         studentRanks = setStudentsPicked(group, studentRanks)
     return groupsOfTwo, studentsLeft
 
-#Chooses a student based on his number of maxRank
-#Returns a number, corresponding to a student in the matrix.
+
+# Chooses a student based on his number of maxRank
+# Returns a number, corresponding to a student in the matrix.
 def chooseStudent(studentRanks, ranksCount, maxRank):
     studentsChosen = []
     if maxRank == 1:
@@ -27,51 +27,54 @@ def chooseStudent(studentRanks, ranksCount, maxRank):
     for i in range(len(ranksCount)):
         if studentRanks[i][1] == -1:
             for j in range(21):
-                ranksCount[i][j]=0
+                ranksCount[i][j] = 0
         if ranksCount[i][maxRank] == 1 and studentRanks[i][1] != -1:
             studentsChosen.append(i)
-    if len(studentsChosen) >1:
-        student = distinguishStudents(studentsChosen, ranksCount, maxRank-1)
+    if len(studentsChosen) > 1:
+        student = distinguishStudents(studentsChosen, ranksCount, maxRank - 1)
         if studentRanks[student][1] != -1:
             return student
         else:
             for i in range(21):
                 ranksCount[student][i] = -1
             return chooseStudent(studentRanks, ranksCount, maxRank)
-    elif len(studentsChosen)==0:
-        return chooseStudent(studentRanks, ranksCount, maxRank-1)
+    elif len(studentsChosen) == 0:
+        return chooseStudent(studentRanks, ranksCount, maxRank - 1)
     return studentsChosen[0]
 
-#This function is used to separate students that have the same maxRank.
-#Returns a number representing a student, distinguished from the others.
+
+# This function is used to separate students that have the same maxRank.
+# Returns a number representing a student, distinguished from the others.
 def distinguishStudents(studentList, ranksCount, maxRank):
     count = len(studentList) + 1
     studentsChosen = []
     for i in studentList:
-        if ranksCount[i][maxRank]>0:
-            #If rank number is less than found before
+        if ranksCount[i][maxRank] > 0:
+            # If rank number is less than found before
             if ranksCount[i][maxRank] < count and ranksCount[i][maxRank] != -1:
                 studentsChosen = []
                 studentsChosen.append(i)
                 count = ranksCount[i][maxRank]
-            #If rank number is equal to those already found
+            # If rank number is equal to those already found
             elif ranksCount[i][maxRank] == count and ranksCount[i][maxRank] != -1:
                 studentsChosen.append(i)
-    if len(studentsChosen) >1:
-        return distinguishStudents(studentsChosen, ranksCount, maxRank-1)
+    if len(studentsChosen) > 1:
+        return distinguishStudents(studentsChosen, ranksCount, maxRank - 1)
     elif len(studentsChosen) == 0:
-        return distinguishStudents(studentList, ranksCount, maxRank-1)
+        return distinguishStudents(studentList, ranksCount, maxRank - 1)
     return studentsChosen[0]
 
-#This function returns the maximum rank of the matrix.
+
+# This function returns the maximum rank of the matrix.
 def maximumRank(matrix):
     maxR = 0
-    for i in range(21,0,-1):
-        if matrix[0][i] != -1 and i>=maxR:
-            maxR=i
+    for i in range(21, 0, -1):
+        if matrix[0][i] != -1 and i >= maxR:
+            maxR = i
     return maxR
 
-#This function puts -1 to a rank if the students left doesn't have that rank.
+
+# This function puts -1 to a rank if the students left doesn't have that rank.
 def disableRank(studentsLeft, studentRanks, ranksCount, maxRank):
     isDisable = True
     for i in studentsLeft:
@@ -82,29 +85,32 @@ def disableRank(studentsLeft, studentRanks, ranksCount, maxRank):
             ranksCount[i][maxRank] = -1
     return isDisable, studentRanks
 
-#This function searches the best student to form a group with the one in parameter.
-#Returns a number, corresponding to the picked student.
+
+# This function searches the best student to form a group with the one in parameter.
+# Returns a number, corresponding to the picked student.
 def findOtherStudent(studentRanks, ranksCount, stu):
     bestPicks = []
     rank = 0
     for i in range(len(studentRanks)):
-        if studentRanks[i][stu]>rank: #If we find a superior rank, we clear the picks and update the rank
-            bestPicks=[]
+        if studentRanks[i][stu] > rank:  # If we find a superior rank, we clear the picks and update the rank
+            bestPicks = []
             rank = studentRanks[i][stu]
             bestPicks.append(i)
-        elif studentRanks[i][stu] == rank: #If we find someone with the same rank, we add him to the list
+        elif studentRanks[i][stu] == rank:  # If we find someone with the same rank, we add him to the list
             bestPicks.append(i)
     if len(bestPicks) == 1:
         return bestPicks[0]
     elif len(bestPicks) > 1:
-        return distinguishStudents(bestPicks, ranksCount, rank-1)
+        return distinguishStudents(bestPicks, ranksCount, rank - 1)
 
-#This function sets the students in 
+
+# This function sets the students in
 def setStudentsPicked(students, studentRanks):
     for student in students:
         for i in range(len(studentRanks)):
             studentRanks[student][i] = -1
     return studentRanks
+
 
 def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
     maxRankPerGroup = [[0] * len(groupsOfTwo) for _ in range(len(studentsLeft))]
@@ -117,7 +123,7 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
         for group in groupsOfTwo:
             stu1 = group[0]
             stu2 = group[1]
-            #We look at the max rank between the student and the group's member
+            # We look at the max rank between the student and the group's member
             if studentRanks[student][stu1] > studentRanks[student][stu2]:
                 maxRankPerGroup[studentIndex][groupNumber] = studentRanks[student][stu1]
                 minRankPerGroup[studentIndex][groupNumber] = studentRanks[student][stu2]
@@ -130,14 +136,14 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
         # chose student
         minMaxRank = 0
         maxMaxRank = 0
-        stu =[]
-        stu2 =[]
+        stu = []
+        stu2 = []
         # on regarde les rangs min et on cherche le max
         for group in range(len(minRankPerGroup)):
             for student in range(len(studentsLeft)):
                 if minRankPerGroup[student][group] > minMaxRank:
                     minMaxRank = minRankPerGroup[student][group]
-                    stu=[]
+                    stu = []
                     stu.append(student)
                 elif minRankPerGroup[student][group] == minMaxRank:
                     stu.append(student)
@@ -147,7 +153,7 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
                 for student in range(len(stu)):
                     if maxRankPerGroup[student][group] > maxMaxRank:
                         maxMaxRank = maxRankPerGroup[student][group]
-                        stu2=[]
+                        stu2 = []
                         stu2.append(student)
                     elif maxRankPerGroup[student][group] == maxMaxRank:
                         stu2.append(student)
@@ -155,10 +161,10 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
             stu2 = stu
         if len(stu2) > 1:
             # on fait un truc
-            stuInter=stu2[0]
+            stuInter = stu2[0]
             stu2 = stuInter
         elif len(stu2) == 1:
-            #on affecte l'étudiant à un groupe
+            # on affecte l'étudiant à un groupe
             groupForStudent = -1
             chosenGroups = []
             for group in range(len(groupsOfTwo)):
@@ -192,7 +198,7 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
             elif len(secondTimeChoosing) >= 1:
                 groupForStudent = secondTimeChoosing[0]  # If there are more than one choice, we take thee first one.
             groupOfThree = groupsOfTwo[groupForStudent]
-            #on place l'étudiant dans le groupe
+            # on place l'étudiant dans le groupe
             groupOfThree.append(studentsLeft[stu2[0]])
             groupsOfThree.append(groupOfThree)
             groupsOfTwo.remove(groupsOfTwo[groupForStudent])
