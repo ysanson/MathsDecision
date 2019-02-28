@@ -8,13 +8,19 @@ def printMatrix(matrix):
         print(line)
 
 #TODO: complete this function
-def createRepartition(groupsOfTwo, studentsLeft, chosenStudent, nbBinomes, nbTrinomes, queue):
-    groupsToCreate = nbBinomes+nbTrinomes-len(groupsOfTwo)
+def createRepartition(groupsOfTwo, studentsLeft, chosenStudent, nbBinomes, nbTrinomes, studentRanks, ranksCount, queue):
+    otherStudent = groupsMulti.findOtherStudent(ME, NR, chosenStudent)
+    group = [chosenStudent, otherStudent]
+    groupsOfTwo.append(group)
+    studentsLeft.remove(chosenStudent)
+    studentsLeft.remove(otherStudent)
+    studentRanks = groupsMulti.setStudentsPicked(group, studentRanks)
+    groupsToCreate = nbBinomes+nbTrinomes-len(groupsOfTwo)-1
     for i in range(groupsToCreate):
         maxRank = groupsMulti.maximumRank(NR)
         student = groupsMulti.chooseStudent(ME, NR, maxRank)
-        if len(student) >1:
-            multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, names)
+        #if len(student) >1:
+            #multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, names)
 
         otherStudent = groupsMulti.findOtherStudent(ME, NR, student)
         group = [student, otherStudent]
@@ -24,7 +30,7 @@ def createRepartition(groupsOfTwo, studentsLeft, chosenStudent, nbBinomes, nbTri
         studentRanks = groupsMulti.setStudentsPicked(group, studentRanks)
     return 0
 
-def multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, names):
+def multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, studentRanks, ranksCount, names):
     proc = []
     q = Queue()
     repartitions = []
@@ -65,8 +71,7 @@ if __name__ == "__main__":
         maxRank = groupsMulti.maximumRank(NR)
         student = groupsMulti.chooseStudent(ME, NR, maxRank)
         if len(student) >1:
-            multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, names)
-
+            multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, ME, NR, names)
         otherStudent = groupsMulti.findOtherStudent(ME, NR, student)
         group = [student, otherStudent]
         groupsOfTwo.append(group)
