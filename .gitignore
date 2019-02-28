@@ -110,3 +110,5 @@ venv.bak/
 groupesSSS\.csv
 
 \.DS_Store
+
+\.idea/
