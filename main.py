@@ -36,7 +36,14 @@ def main():
     print("Groups of 3 : ")
     printMatrix(groupsOfThree)
     print("Writing CSV...")
-    fileOperations.writeCSV(groupsOfTwo, groupsOfThree, names)
+    repartitions = []
+    repartition = []
+    for group in groupsOfThree:
+        repartition.append(group)
+    for group in groupsOfTwo:
+        repartition.append(group)
+    repartitions.append(repartition)
+    fileOperations.writeCSV(repartitions, names)
     print("Writing complete.\nEnd of the script.")
 
 

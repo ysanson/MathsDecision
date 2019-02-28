@@ -25,17 +25,14 @@ def readAppreciationsCSV(fileName):
 
 
 # This function writes a CSV conforming to the standards required by the project.
-def writeCSV(groupsOfTwo, groupsOfThree, nameCorrelation):
+def writeCSV(repartitions, nameCorrelation):
     with open('SSS.csv', 'w') as rendu:
         writer = csv.writer(rendu, delimiter=" ")
-        line = []
-        for i in range(len(groupsOfThree)):  # Writing groups of three
-            for stu in groupsOfThree[i]:
-                line.append(nameCorrelation[stu])
-            line[len(line) - 1] += ";"
-        for i in range(len(groupsOfTwo)):  # Writing groups of two
-            for stu in groupsOfTwo[i]:
-                line.append(nameCorrelation[stu])
-            line[len(line) - 1] += ";"
-        line[len(line) - 1] = line[len(line) - 1][:-1]
+        for repartition in repartitions:
+            line = []
+            for group in repartition:
+                for student in group:
+                    line.append(nameCorrelation[student])
+                line[len(line) - 1] += ";"
+        line[len(line)-1] = line[len(line)-1][:-1]
         writer.writerow(line)
