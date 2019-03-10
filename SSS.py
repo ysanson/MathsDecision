@@ -17,7 +17,6 @@ def main():
     names, students = fileOperations.readAppreciationsCSV(fileName)
     n = len(students)
     ME = ranks.attributeRanks(students)
-    printMatrix(ME)
     NR = ranks.countRanks(ME, n)
     nbBinomes, nbTrinomes = 0, 0
     if n < 36:
