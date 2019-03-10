@@ -78,6 +78,9 @@ def distinguishStudents(studentList, ranksCount, maxRank):
     """
     count = len(studentList) + 1
     studentsChosen = []
+    if maxRank==1: #If the students are equal in the last rank, we take the first one.
+        return studentList[0]
+
     for i in studentList:
         if ranksCount[i][maxRank] > 0:
             # If rank number is less than found before
@@ -220,7 +223,8 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
                     stu = []
                     stu.append(student)
                 elif minRankPerGroup[student][group] == minMaxRank:
-                    stu.append(student)
+                    if not stu.__contains__(student):
+                        stu.append(student)
         if len(stu) > 1:
             # on regarde les rangmax et on cherche le max
             for group in range(len(maxRankPerGroup)):
@@ -230,7 +234,8 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
                         stu2 = []
                         stu2.append(student)
                     elif maxRankPerGroup[student][group] == maxMaxRank:
-                        stu2.append(student)
+                        if not stu2.__contains__(student):
+                            stu2.append(student)
         elif len(stu) == 1:
             stu2 = stu
         if len(stu2) > 1:
