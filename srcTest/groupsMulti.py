@@ -3,6 +3,16 @@ import multiprocessing
 # This function creates groups of 2, based on the appreciations given, and the groups we have to form.
 # Returns an array containing the groups, and another array containing the students left.
 def createGroupsOfTwo(studentRanks, ranksCount, numberOfGroups):
+    """
+    This function creates groups of 2, based on the appreciations given, and the groups we have to form.
+    :param studentRanks: matrix containing the ranks between each student.
+    :param ranksCount: matrix containing the number of each rank for each student.
+    :param numberOfGroups: the number of groups we have to form.
+    :type studentRanks: list of lists
+    :type ranksCount: list of lists
+    :type numberOfGroups: int
+    :return: 
+    """
     groupsOfTwo = []
     studentsLeft = []
     maxRank = 21
@@ -96,6 +106,7 @@ def findOtherStudent(studentRanks, ranksCount, stu):
     bestPicks = []
     rank = 0
     for i in range(len(studentRanks)):
+        print(i, stu)
         if studentRanks[i][stu] > rank:  # If we find a superior rank, we clear the picks and update the rank
             bestPicks = []
             rank = studentRanks[i][stu]

@@ -16,10 +16,14 @@ RANKS_CORRELATION = {
     "AR": 5
 }
 
-
-# Students is a bi-dimensional array containing the students appreciations for each other.
-# This function returns a bi-dimensional array containing the rank of each student's matching.
 def attributeRanks(students):
+    """ 
+    This function creates a matrix containing the ranks between each student.
+    :param students: bi-dimensional array containing the students appreciations for each other.
+    :type students: list of lists
+    :return: bi-dimensional array containing the rank of each student's matching.
+    :return type: list of lists
+    """
     n = len(students)
     ME = [[-1] * n for _ in range(n)]
     for i in range(n):
@@ -30,10 +34,16 @@ def attributeRanks(students):
             ME[i][j] = ME[j][i] = rank
     return ME
 
-
-# Counts the number of specific ranks a student have.
-# Returns a matrix, n*22, containing the count of ranks.
 def countRanks(ME, n):
+    """ 
+    Counts the number of specific ranks a student have.
+    :param ME: the matrix containing the ranks between each student
+    :param n: the nnumber of students
+    :type ME: list of lists
+    :type n: int
+    :return: a matrix containing the numbre of each rank for each student.
+    :return type: list of lists
+    """
     NR = [[0] * 22 for _ in range(n)]
     for i in range(n):
         for j in range(n):

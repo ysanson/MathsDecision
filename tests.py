@@ -1,7 +1,7 @@
 import csv, sys
 from multiprocessing import Process, Queue
 import src.fileOperations as fileOperations
-import src.groupsMulti as groupsMulti
+import srcTest.groupsMulti as groupsMulti
 import src.ranks as ranks
 
 #This function prints a matrix on screen.
@@ -18,21 +18,36 @@ def createRepartition(groupsOfTwo, studentsLeft, chosenStudent, nbBinomes, nbTri
     studentsLeft.remove(otherStudent)
     studentRanks = groupsMulti.setStudentsPicked(group, studentRanks)
     groupsToCreate = nbBinomes+nbTrinomes-len(groupsOfTwo)-1
+    repartitions = []
     for i in range(groupsToCreate):
         maxRank = groupsMulti.maximumRank(NR)
         student = groupsMulti.chooseStudent(ME, NR, maxRank)
-        #if len(student) >1:
-            #multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, names)
-
+        if len(student) > 1: #If there is more than 1 student chosen, we create a possible matching for each student.
+            repMulti = multiProc(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, ME, NR, names)
+            for rep in repMulti:
+                repartitions.append(rep)
+            queue.put(repartitions)
+            return
         otherStudent = groupsMulti.findOtherStudent(ME, NR, student)
         group = [student, otherStudent]
         groupsOfTwo.append(group)
         studentsLeft.remove(student)
         studentsLeft.remove(otherStudent)
         studentRanks = groupsMulti.setStudentsPicked(group, studentRanks)
-    return 0
+    
+    if nbTrinomes>=1:
+        groupsOfTwo, groupsOfThree = groupsMulti.createGroupsOfThree(groupsOfTwo, studentsLeft, ME)
+        repartition = []
+        for group in groupsOfThree:
+            repartition.append(group)
+        for group in groupsOfTwo:
+            repartition.append(group)
+        repartitions.append(repartition)
+    else:
+        repartitions.append(groupsOfTwo)
+    queue.put(repartitions)
 
-def multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, studentRanks, ranksCount, names):
+def multiProc(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, studentRanks, ranksCount, names):
     proc = []
     q = Queue()
     repartitions = []
@@ -42,8 +57,7 @@ def multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, studentRanks, 
     for process in proc:
         process.join()
         repartitions.append(q.get())
-    fileOperations.writeCSV(repartitions, names)
-    sys.exit()
+    return repartitions
 
 if __name__ == "__main__":
     ext = sys.argv[1][1:]
@@ -62,7 +76,7 @@ if __name__ == "__main__":
     else:
         nbTrinomes = n-36
         nbBinomes = 18-nbTrinomes
-    
+    repartitions = []
     groupsOfTwo = []
     studentsLeft = []
     maxRank = 21
@@ -72,14 +86,19 @@ if __name__ == "__main__":
     for i in range(nbBinomes+nbTrinomes):
         maxRank = groupsMulti.maximumRank(NR)
         student = groupsMulti.chooseStudent(ME, NR, maxRank)
-        if len(student) >1:
-            multiThread(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, ME, NR, names)
+        if type(student) == list: #If there is more than 1 student chosen, we create a possible matching for each student.
+            repMulti = multiProc(groupsOfTwo, studentsLeft, nbBinomes, nbTrinomes, ME, NR, names)
+            for rep in repMulti:
+                repartitions.append(rep)
+            fileOperations.writeCSV(repartitions, names)
+            sys.exit()
+
         otherStudent = groupsMulti.findOtherStudent(ME, NR, student)
         group = [student, otherStudent]
         groupsOfTwo.append(group)
         studentsLeft.remove(student)
         studentsLeft.remove(otherStudent)
-        studentRanks = groupsMulti.setStudentsPicked(group, studentRanks)
+        ME = groupsMulti.setStudentsPicked(group, ME)
 
     groupsOfTwo, studentsLeft = groupsMulti.createGroupsOfTwo(ME, NR, (nbBinomes+nbTrinomes))
     groupsOfThree=[]
@@ -94,7 +113,7 @@ if __name__ == "__main__":
     print("Groups of 3 : ")
     printMatrix(groupsOfThree)
     print("Writing CSV...")
-    repartitions = []
+    
     repartition = []
     for group in groupsOfThree:
         repartition.append(group)

@@ -1,6 +1,16 @@
-# This function creates groups of 2, based on the appreciations given, and the groups we have to form.
-# Returns an array containing the groups, and another array containing the students left.
+
 def createGroupsOfTwo(studentRanks, ranksCount, numberOfGroups):
+    """
+    This function creates groups of 2, based on the appreciations given, and the groups we have to form.
+    :param studentRanks: matrix containing the ranks between each student.
+    :param ranksCount: matrix containing the number of each rank for each student.
+    :param numberOfGroups: the number of groups we have to form.
+    :type studentRanks: list of lists
+    :type ranksCount: list of lists
+    :type numberOfGroups: int
+    :return: a list of list, containing the groups, and a list containing the students left.
+    :return type: tuple (list, list)
+    """
     groupsOfTwo = []
     studentsLeft = []
     maxRank = 21
@@ -18,9 +28,18 @@ def createGroupsOfTwo(studentRanks, ranksCount, numberOfGroups):
     return groupsOfTwo, studentsLeft
 
 
-# Chooses a student based on his number of maxRank
-# Returns a number, corresponding to a student in the matrix.
 def chooseStudent(studentRanks, ranksCount, maxRank):
+    """ 
+    Chooses a student based on his number of maxRank.
+    :param studentRanks: matrix containing the ranks between each student.
+    :param ranksCount: matrix containing the number of each rank for each student.
+    :param maxRank: the maximum rank we search for.
+    :type studentRanks: list of lists
+    :type ranksCount: list of lists
+    :type maxRank: int
+    :return: a student from the available students.
+    :return type: int
+    """
     studentsChosen = []
     if maxRank == 1:
         return None
@@ -43,9 +62,18 @@ def chooseStudent(studentRanks, ranksCount, maxRank):
     return studentsChosen[0]
 
 
-# This function is used to separate students that have the same maxRank.
-# Returns a number representing a student, distinguished from the others.
 def distinguishStudents(studentList, ranksCount, maxRank):
+    """ 
+    This function is used to separate students that have the same maxRank.
+    :param studentList: the possible students to choose.
+    :param ranksCount: matrix containing the number of each rank for each student.
+    :param maxRank: the maximum rank we search for.
+    :type studentList: list of int
+    :type ranksCount: list of lists
+    :type maxRank: int
+    :return: a student distinguished from the other.
+    :return type: int
+    """
     count = len(studentList) + 1
     studentsChosen = []
     for i in studentList:
@@ -65,17 +93,34 @@ def distinguishStudents(studentList, ranksCount, maxRank):
     return studentsChosen[0]
 
 
-# This function returns the maximum rank of the matrix.
 def maximumRank(matrix):
+    """ 
+    This function returns the maximum rank of the matrix.
+    :param matrix: the ranksCount, the number of ranks for each student
+    :type matrix: list of lists
+    :return: the current maximum rank
+    :return type: int
+    """
     maxR = 0
     for i in range(21, 0, -1):
         if matrix[0][i] != -1 and i >= maxR:
             maxR = i
     return maxR
 
-
-# This function puts -1 to a rank if the students left doesn't have that rank.
 def disableRank(studentsLeft, studentRanks, ranksCount, maxRank):
+    """ 
+    This function puts -1 to a rank if the students left doesn't have that rank.
+    :param studentsLeft: the leftover students.
+    :param studentRanks: matrix containing the ranks between each student.
+    :param ranksCount: matrix containing the number of each rank for each student.
+    :param maxRank: the maximum rank we search for.
+    :type studentsLeft: list of int
+    :type studentRanks: list of lists
+    :type ranksCount: list of lists
+    :type maxRank: int
+    :return: a parameter to see if the rank has been disabled, and the updated studentRanks
+    :return type: tuple(boolean, list)
+    """
     isDisable = True
     for i in studentsLeft:
         if ranksCount[i][maxRank] != 0:
@@ -85,10 +130,18 @@ def disableRank(studentsLeft, studentRanks, ranksCount, maxRank):
             ranksCount[i][maxRank] = -1
     return isDisable, studentRanks
 
-
-# This function searches the best student to form a group with the one in parameter.
-# Returns a number, corresponding to the picked student.
 def findOtherStudent(studentRanks, ranksCount, stu):
+    """ 
+    This function searches the best student to form a group with the one in parameter.
+    :param studentRanks: matrix containing the ranks between each student.
+    :param ranksCount: matrix containing the number of each rank for each student.
+    :param stu: the student to match with
+    :type studentRanks: list of lists
+    :type ranksCount: list of lists
+    :param stu: int
+    :return: the student to associate
+    :return type: int
+    """
     bestPicks = []
     rank = 0
     for i in range(len(studentRanks)):
@@ -104,8 +157,16 @@ def findOtherStudent(studentRanks, ranksCount, stu):
         return distinguishStudents(bestPicks, ranksCount, rank - 1)
 
 
-# This function sets the students in
 def setStudentsPicked(students, studentRanks):
+    """
+    This function sets the students picked.
+    :param students: the students to set
+    :param studentRanks: matrix containing the ranks between each student.
+    :type students: list of int
+    :type studentRanks: list of lists
+    :return: the updated studentRanks matrix.
+    :return type: list of lists
+    """
     for student in students:
         for i in range(len(studentRanks)):
             studentRanks[student][i] = -1
@@ -113,6 +174,17 @@ def setStudentsPicked(students, studentRanks):
 
 
 def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
+    """ 
+    This function creates the groups of three based on the actual groups of 2 and the students left.
+    :param groupsOfTwo: the groups of two that has been created.
+    :param studentsLeft: the leftover students
+    :param studentRanks: matrix containing the ranks between each student.
+    :type groups of two: list of lists
+    :type studentsLeft: list of int
+    :type studentRanks: list of lists
+    :return: the groups of three created, along with the groups of two
+    :return type: list of lists
+    """
     maxRankPerGroup = [[0] * len(groupsOfTwo) for _ in range(len(studentsLeft))]
     minRankPerGroup = [[0] * len(groupsOfTwo) for _ in range(len(studentsLeft))]
     groupsOfThree = []

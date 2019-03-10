@@ -1,9 +1,13 @@
 import csv, os.path
 
-
-# This function reads the CSV containing the preferences of each student.
-# Returns a dictionary row-name, and the matrix of appreciations.
 def readAppreciationsCSV(fileName):
+    """ 
+    This function reads the CSV containing the preferences of each student.
+    :param fileName: the file name, without the path.
+    :type fileName: str
+    :return: a dictionnary containing the students' names associated with a number, the column in the matrix.
+    :return type: tuple(dictionnary, list of lists)
+    """
     relPath = os.path.abspath(os.path.dirname(__file__))
     pathToFile = os.path.join(relPath, "../../DONNEES/" + fileName)
     with open(pathToFile, mode='r') as preferences:
@@ -23,8 +27,15 @@ def readAppreciationsCSV(fileName):
         del nameCorrelation[-1]
         return nameCorrelation, appreciations
 
-# This function writes a CSV conforming to the standards required by the project.
 def writeCSV(repartitions, nameCorrelation):
+    """ 
+    This function writes a CSV conforming to the standards required by the project.
+    :param repartitions: the created groups
+    :param nameCorrelation: the dictionnary name-row
+    :type repartition: list of lists of list
+    :type nameCorrelation: dictionnary
+    :return: nothing
+    """
     with open('SSS.csv', 'w') as rendu:
         writer = csv.writer(rendu, delimiter=" ")
         for repartition in repartitions:
