@@ -41,8 +41,10 @@ def chooseStudent(studentRanks, ranksCount, maxRank):
     :return type: int
     """
     studentsChosen = []
-    if maxRank == 1:
-        return None
+    if maxRank==1: #If the students are equal in the last rank, we take the first one.
+        for i in range(len(studentRanks)):
+            if studentRanks[i][1] != -1:
+                return i
     for i in range(len(ranksCount)):
         if studentRanks[i][1] == -1:
             for j in range(21):
