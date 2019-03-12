@@ -209,9 +209,7 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
                 minRankPerGroup[studentIndex][groupNumber] = studentRanks[student][stu1]
             groupNumber += 1
 
-    print(studentsLeft)
     for i in range(len(studentsLeft)):
-        print(i)
         # chose student
         minMaxRank = 0
         maxMaxRank = 0
@@ -275,7 +273,6 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
             groupForStudent = chosenGroups[0]
         elif len(secondTimeChoosing) >= 1:
             groupForStudent = secondTimeChoosing[0]  # If there are more than one choice, we take thee first one.
-        print("group for student: ", groupForStudent)
         groupOfThree = groupsOfTwo[groupForStudent]
         # on place l'étudiant dans le groupe
         groupOfThree.append(studentsLeft[stu2[0]])
