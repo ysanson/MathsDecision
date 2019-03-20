@@ -2,6 +2,7 @@ import sys
 import src.fileOperations as fileOperations
 import src.groups as groups
 import src.ranks as ranks
+import src.globals as glo
 
 
 # This function prints a matrix on screen.
@@ -12,6 +13,7 @@ def printMatrix(matrix):
 
 # This function is the main of this script.
 def main():
+    glo.init()
     ext = sys.argv[1][1:]
     fileName = "preferences" + ext + ".csv"
     names, students = fileOperations.readAppreciationsCSV(fileName)
@@ -37,14 +39,19 @@ def main():
     print("Groups of 3 : ")
     printMatrix(groupsOfThree)
     print("Writing CSV...")
-    repartitions = []
+    
     repartition = []
     for group in groupsOfThree:
         repartition.append(group)
     for group in groupsOfTwo:
         repartition.append(group)
-    repartitions.append(repartition)
-    fileOperations.writeCSV(repartitions, names)
+    glo.repartitions.append(repartition)
+
+    if len(glo.equalsStudentsList) > 1 and n <= 11:
+        printMatrix(glo.equalsStudentsList)
+        groups.createMultipleRepartitions()
+
+    fileOperations.writeCSV(glo.repartitions, names)
     print("Writing complete.\nEnd of the script.")
 
 

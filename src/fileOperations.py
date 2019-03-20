@@ -44,5 +44,5 @@ def writeCSV(repartitions, nameCorrelation):
                 for student in group:
                     line.append(nameCorrelation[student])
                 line[len(line) - 1] += ";"
-        line[len(line)-1] = line[len(line)-1][:-1]
-        writer.writerow(line)
+            line[len(line)-1] = line[len(line)-1][:-1]
+            writer.writerow(line)

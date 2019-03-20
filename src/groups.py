@@ -1,3 +1,5 @@
+import src.globals as glo
+import copy
 
 def createGroupsOfTwo(studentRanks, ranksCount, numberOfGroups):
     """
@@ -78,7 +80,9 @@ def distinguishStudents(studentList, ranksCount, maxRank):
     """
     count = len(studentList) + 1
     studentsChosen = []
-    if maxRank==1: #If the students are equal in the last rank, we take the first one.
+    if maxRank==1 : #If the students are equal in the last rank, we take the first one.
+        if len(studentList) >1:
+            glo.equalsStudentsList.append(studentList)
         return studentList[0]
 
     for i in studentList:
@@ -209,7 +213,7 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
                 minRankPerGroup[studentIndex][groupNumber] = studentRanks[student][stu1]
             groupNumber += 1
 
-    for i in range(len(studentsLeft)):
+    for _ in range(len(studentsLeft)):
         # chose student
         minMaxRank = 0
         maxMaxRank = 0
@@ -272,6 +276,8 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
         if len(chosenGroups) == 1:
             groupForStudent = chosenGroups[0]
         elif len(secondTimeChoosing) >= 1:
+            if len(secondTimeChoosing) > 1:
+                glo.equalsStudentsList.append(secondTimeChoosing)
             groupForStudent = secondTimeChoosing[0]  # If there are more than one choice, we take thee first one.
         groupOfThree = groupsOfTwo[groupForStudent]
         # on place l'étudiant dans le groupe
@@ -279,3 +285,30 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
         groupsOfThree.append(groupOfThree)
         groupsOfTwo.remove(groupsOfTwo[groupForStudent])
     return groupsOfTwo, groupsOfThree
+
+
+def createMultipleRepartitions():
+    for students in glo.equalsStudentsList:
+        for i,otherStudent in enumerate(students):
+            if i != 0:
+                glo.repartitions.append(copy.deepcopy(glo.repartitions[0]))
+                intervertStudents(students[0], otherStudent, len(glo.repartitions)-1)
+
+            
+
+def intervertStudents(stu1, stu2, repartitionIndex):
+    groupStu1 = findStudentInGroup(stu1, glo.repartitions[0])
+    groupStu2 = findStudentInGroup(stu2, glo.repartitions[0])
+    glo.repartitions[repartitionIndex][groupStu1].remove(stu1)
+    glo.repartitions[repartitionIndex][groupStu1].append(stu2)
+    glo.repartitions[repartitionIndex][groupStu2].remove(stu2)
+    glo.repartitions[repartitionIndex][groupStu2].append(stu1)
+
+
+def findStudentInGroup(stu, repartition):
+    for i,group in enumerate(repartition):
+        if group.__contains__(stu):
+            return i
+    return -1
+
+
