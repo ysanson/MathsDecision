@@ -27,10 +27,10 @@ def readAppreciationsCSV(fileName):
         del nameCorrelation[-1]
         return nameCorrelation, appreciations
 
-def writeCSV(repartitions, nameCorrelation):
+def writeCSV(divisions, nameCorrelation):
     """ 
     This function writes a CSV conforming to the standards required by the project.
-    :param repartitions: the created groups
+    :param divisions: the created groups
     :param nameCorrelation: the dictionnary name-row
     :type repartition: list of lists of list
     :type nameCorrelation: dictionnary
@@ -38,7 +38,7 @@ def writeCSV(repartitions, nameCorrelation):
     """
     with open('SSS.csv', 'w') as rendu:
         writer = csv.writer(rendu, delimiter=" ")
-        for repartition in repartitions:
+        for repartition in divisions:
             line = []
             for group in repartition:
                 for student in group:

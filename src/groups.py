@@ -287,26 +287,47 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
     return groupsOfTwo, groupsOfThree
 
 
-def createMultipleRepartitions():
+def createMultipledivisions():
+    """
+    This function creates multiple divisions whenever it is necessary.
+    It appends the divisions in the global divisions list.
+    For each equal students, we create a division in which we intervert the student in first place with the other one considered.
+    """
     for students in glo.equalsStudentsList:
         for i,otherStudent in enumerate(students):
             if i != 0:
-                glo.repartitions.append(copy.deepcopy(glo.repartitions[0]))
-                intervertStudents(students[0], otherStudent, len(glo.repartitions)-1)
+                glo.divisions.append(copy.deepcopy(glo.divisions[0]))
+                intervertStudents(students[0], otherStudent, len(glo.divisions)-1)
 
             
 
-def intervertStudents(stu1, stu2, repartitionIndex):
-    groupStu1 = findStudentInGroup(stu1, glo.repartitions[0])
-    groupStu2 = findStudentInGroup(stu2, glo.repartitions[0])
-    glo.repartitions[repartitionIndex][groupStu1].remove(stu1)
-    glo.repartitions[repartitionIndex][groupStu1].append(stu2)
-    glo.repartitions[repartitionIndex][groupStu2].remove(stu2)
-    glo.repartitions[repartitionIndex][groupStu2].append(stu1)
+def intervertStudents(stu1, stu2, divisionIndex):
+    """
+    This function interverts 2 students in their relative groups, in a given division.
+    :param stu1: the first student 
+    :param stu2: the second student
+    :param divisionIndex: the considered division.
+    :type stu1: int
+    :type stu2: int
+    :type divisionIndex: int
+    """
+    groupStu1 = findStudentInGroup(stu1, glo.divisions[0])
+    groupStu2 = findStudentInGroup(stu2, glo.divisions[0])
+    glo.divisions[divisionIndex][groupStu1].remove(stu1)
+    glo.divisions[divisionIndex][groupStu1].append(stu2)
+    glo.divisions[divisionIndex][groupStu2].remove(stu2)
+    glo.divisions[divisionIndex][groupStu2].append(stu1)
 
 
-def findStudentInGroup(stu, repartition):
-    for i,group in enumerate(repartition):
+def findStudentInGroup(stu, division):
+    """
+    This function finds the group of a student, from a given division.
+    :param stu: the student to find
+    :param division: the division to find the student in
+    :type stu: int
+    :type division: list of lists of int
+    """
+    for i,group in enumerate(division):
         if group.__contains__(stu):
             return i
     return -1

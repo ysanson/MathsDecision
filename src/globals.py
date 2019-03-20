@@ -1,5 +1,5 @@
 def init():
     global equalsStudentsList
     equalsStudentsList = []
-    global repartitions
-    repartitions = []
+    global divisions
+    divisions = []

@@ -13,6 +13,7 @@ def printMatrix(matrix):
 
 # This function is the main of this script.
 def main():
+    print("Beginning SSS")
     glo.init()
     ext = sys.argv[1][1:]
     fileName = "preferences" + ext + ".csv"
@@ -33,26 +34,19 @@ def main():
     groupsOfThree = []
     if nbTrinomes >= 1:
         groupsOfTwo, groupsOfThree = groups.createGroupsOfThree(groupsOfTwo, studentsLeft, ME)
-    print("Final results :")
-    print("Groups of 2 : ")
-    printMatrix(groupsOfTwo)
-    print("Groups of 3 : ")
-    printMatrix(groupsOfThree)
-    print("Writing CSV...")
-    
-    repartition = []
+
+    division = []
     for group in groupsOfThree:
-        repartition.append(group)
+        division.append(group)
     for group in groupsOfTwo:
-        repartition.append(group)
-    glo.repartitions.append(repartition)
+        division.append(group)
+    glo.divisions.append(division)
 
     if len(glo.equalsStudentsList) > 1 and n <= 11:
-        printMatrix(glo.equalsStudentsList)
-        groups.createMultipleRepartitions()
+        groups.createMultipledivisions()
 
-    fileOperations.writeCSV(glo.repartitions, names)
-    print("Writing complete.\nEnd of the script.")
+    fileOperations.writeCSV(glo.divisions, names)
+    print("Writing complete.\nEnd of SSS.")
 
 
 main()
