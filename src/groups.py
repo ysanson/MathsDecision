@@ -287,13 +287,18 @@ def createGroupsOfThree(groupsOfTwo, studentsLeft, studentRanks):
     return groupsOfTwo, groupsOfThree
 
 
-def createMultipledivisions():
+def createMultipledivisions(numberOfResults):
     """
     This function creates multiple divisions whenever it is necessary.
     It appends the divisions in the global divisions list.
     For each equal students, we create a division in which we intervert the student in first place with the other one considered.
+    :param numberOfResults: the number of divisions to create
+    :type numberOfResults: int
     """
     for students in glo.equalsStudentsList:
+        if numberOfResults == -1:
+            if len(glo.divisions) == numberOfResults:
+                return
         for i,otherStudent in enumerate(students):
             if i != 0:
                 glo.divisions.append(copy.deepcopy(glo.divisions[0]))

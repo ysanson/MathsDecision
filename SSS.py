@@ -15,7 +15,18 @@ def printMatrix(matrix):
 def main():
     print("Beginning SSS")
     glo.init()
-    ext = sys.argv[1][1:]
+    launch_mode = "exhaustif"
+    number_results_max = None
+    for arg in sys.argv[1:]:
+        sub_arg = arg[2:]
+        if sub_arg[:3] == "arg":
+            launch_mode = sub_arg[4:]
+        elif sub_arg[:3] == "num":
+            number_results_max = sub_arg[7:]
+        elif sub_arg[:3] == "ext":
+            ext = sub_arg[4:]
+    if number_results_max == None:
+        number_results_max = -1
     fileName = "preferences" + ext + ".csv"
     names, students = fileOperations.readAppreciationsCSV(fileName)
     n = len(students)
@@ -42,8 +53,14 @@ def main():
         division.append(group)
     glo.divisions.append(division)
 
-    if len(glo.equalsStudentsList) > 1 and n <= 11:
-        groups.createMultipledivisions()
+    if len(glo.equalsStudentsList) > 1:
+        if launch_mode == "exhaustif":
+            if n <= 11:
+                groups.createMultipledivisions(-1)
+        elif launch_mode == "reel":
+            groups.createMultipledivisions(number_results_max)
+
+
 
     fileOperations.writeCSV(glo.divisions, names)
     print("Writing complete.\nEnd of SSS.")

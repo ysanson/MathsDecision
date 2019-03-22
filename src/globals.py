@@ -3,3 +3,4 @@ def init():
     equalsStudentsList = []
     global divisions
     divisions = []
+   
