@@ -296,13 +296,13 @@ def createMultipledivisions(numberOfResults):
     :type numberOfResults: int
     """
     for students in glo.equalsStudentsList:
-        if numberOfResults == -1:
-            if len(glo.divisions) == numberOfResults:
-                return
         for i,otherStudent in enumerate(students):
             if i != 0:
                 glo.divisions.append(copy.deepcopy(glo.divisions[0]))
                 intervertStudents(students[0], otherStudent, len(glo.divisions)-1)
+            if numberOfResults != -1:
+                if len(glo.divisions) >= numberOfResults:
+                    return
 
             
 

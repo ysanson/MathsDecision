@@ -28,6 +28,7 @@ def main():
     if number_results_max == None:
         number_results_max = -1
     fileName = "preferences" + ext + ".csv"
+    print("Launching with arguments", launch_mode, number_results_max, ext)
     names, students = fileOperations.readAppreciationsCSV(fileName)
     n = len(students)
     ME = ranks.attributeRanks(students)
@@ -58,9 +59,7 @@ def main():
             if n <= 11:
                 groups.createMultipledivisions(-1)
         elif launch_mode == "reel":
-            groups.createMultipledivisions(number_results_max)
-
-
+            groups.createMultipledivisions((int)(number_results_max))
 
     fileOperations.writeCSV(glo.divisions, names)
     print("Writing complete.\nEnd of SSS.")
