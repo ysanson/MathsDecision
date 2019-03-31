@@ -18,7 +18,7 @@ def readAppreciationsCSV(fileName):
         for line in csv_reader:
             if line_count == 0:  # Retrieve student names
                 for pos, name in enumerate(line):
-                    nameCorrelation[pos - 1] = name  # Because the names are 1 column away from the matrix column.
+                    nameCorrelation[pos - 1] = name.strip()  # Because the names are 1 column away from the matrix column.
                 line_count += 1
             else:
                 line.pop(0)
@@ -43,6 +43,6 @@ def writeCSV(divisions, nameCorrelation):
             for group in repartition:
                 for student in group:
                     line.append(nameCorrelation[student])
-                line[len(line) - 1] += ";"
+                line[len(line) - 1] += ';'
             line[len(line)-1] = line[len(line)-1][:-1]
             writer.writerow(line)

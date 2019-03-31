@@ -56,11 +56,10 @@ def main():
 
     if len(glo.equalsStudentsList) > 1:
         if launch_mode == "exhaustif":
-            if n <= 11:
+            if n<= 11:
                 groups.createMultipledivisions(-1)
         elif launch_mode == "reel":
             groups.createMultipledivisions((int)(number_results_max))
-
     fileOperations.writeCSV(glo.divisions, names)
     print("Writing complete.\nEnd of SSS.")
 
